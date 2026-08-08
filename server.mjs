@@ -50,9 +50,10 @@ const PRODUCTS = {
   loupe: {
     name: "Loupe",
     slug: "loupe",
-    description: "Frame and editorial-lens analyser (FSL).",
-    licence: "FSL-1.1 → Apache 2.0",
-    comingSoon: true,
+    description: "Frame and editorial-lens analyser (proprietary).",
+    licence: "Proprietary",
+    gated: true,
+    requestUrl: "https://onlinejourno.com/contact/",
   },
   dispatch: {
     name: "Dispatch",

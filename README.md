@@ -33,7 +33,7 @@ A downloadable, WordPress-style installer for self-hosting OnlineJourno products
 | Daybook | Coming soon | FSL editorial calendar. |
 | Galley | Coming soon | FSL story report tool. |
 | Frontmatter | Coming soon | FSL merit↔reach engine. |
-| Loupe | Coming soon | FSL frame analyser. |
+| Loupe | Request access | Proprietary frame analyser. |
 | Dispatch | Coming soon | FSL editorial-intelligence dashboard. |
 | RegWatch | Request access | Proprietary regulatory signal watch. |
 | LawWatch | Request access | Proprietary legal signal watch. |
