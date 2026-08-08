@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OnlineJourno Installer</title>
+  <link rel="stylesheet" href="installer.css">
+</head>
+<body>
+  <div class="oj-installer">
+    <header class="oj-installer__brand">
+      <div class="oj-mark" aria-hidden="true">
+        <svg viewBox="0 0 64 64" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+          <rect width="64" height="64" rx="4" fill="var(--oj-ink)"/>
+          <path d="M12 52V12h8l12 22 12-22h8v40h-8V28L23 52h-6L12 28v24H8z" fill="var(--oj-paper)"/>
+        </svg>
+      </div>
+      <div>
+        <p class="oj-label">Self-hosting installer</p>
+        <h1 class="oj-title">OnlineJourno</h1>
+      </div>
+    </header>
+
+    <main id="wizard" class="oj-wizard">
+      <!-- Step 1: Welcome + prerequisite check -->
+      <section id="step-welcome" class="oj-step is-active">
+        <h2 class="oj-step__title">Install OnlineJourno on your computer</h2>
+        <p class="oj-step__deck">
+          This wizard sets up a private newsroom, entirely on your own machine.
+          Your data stays yours. No command line required.
+        </p>
+
+        <div class="oj-checks" id="checks">
+          <div class="oj-check" data-check="docker">
+            <span class="oj-check__icon" aria-hidden="true">◌</span>
+            <span class="oj-check__label">Docker + Docker Compose</span>
+          </div>
+          <div class="oj-check" data-check="node">
+            <span class="oj-check__icon" aria-hidden="true">◌</span>
+            <span class="oj-check__label">Node.js</span>
+          </div>
+          <div class="oj-check" data-check="ports">
+            <span class="oj-check__icon" aria-hidden="true">◌</span>
+            <span class="oj-check__label">Ports 3000 and 5432 available</span>
+          </div>
+        </div>
+
+        <div class="oj-help" id="prereq-help" hidden>
+          <p><strong>Docker is required.</strong> Install <a href="https://docs.docker.com/get-docker/" target="_blank" rel="noopener">Docker Desktop</a> (macOS/Windows) or Docker Engine (Linux), then return here and click <em>Check again</em>.</p>
+        </div>
+
+        <div class="oj-actions">
+          <button id="btn-check" class="oj-button oj-button--primary">Check system</button>
+          <button id="btn-start" class="oj-button oj-button--primary" hidden>Start installation</button>
+        </div>
+      </section>
+
+      <!-- Step 2: Product selection -->
+      <section id="step-products" class="oj-step">
+        <h2 class="oj-step__title">Choose a product</h2>
+        <p class="oj-step__deck">More products will appear here as they become available.</p>
+        <div class="oj-products" id="products"></div>
+        <div class="oj-actions">
+          <button class="oj-button oj-button--secondary" data-back>Back</button>
+          <button id="btn-product-next" class="oj-button oj-button--primary" disabled>Continue</button>
+        </div>
+      </section>
+
+      <!-- Step 3: Configure -->
+      <section id="step-config" class="oj-step">
+        <h2 class="oj-step__title">Configure your newsroom</h2>
+        <p class="oj-step__deck">These values are stored only in the <code>.env</code> file on your machine.</p>
+
+        <form id="config-form" class="oj-form" novalidate>
+          <fieldset>
+            <legend>Newsroom</legend>
+            <label>
+              <span>Newsroom name</span>
+              <input type="text" name="outletName" placeholder="e.g. The Meridian Tribune" required>
+            </label>
+            <label>
+              <span>Short slug</span>
+              <input type="text" name="outletSlug" value="self" pattern="[a-z0-9_-]+" title="Lowercase letters, numbers, hyphens and underscores only">
+              <small>Used internally as the tenant identifier.</small>
+            </label>
+          </fieldset>
+
+          <fieldset>
+            <legend>Admin account</legend>
+            <label>
+              <span>Admin email</span>
+              <input type="email" name="adminEmail" placeholder="you@yournewsroom.org" required>
+            </label>
+            <label>
+              <span>Admin password</span>
+              <input type="password" name="adminPassword" minlength="12" required>
+              <small>At least 12 characters. Stored only in your local database.</small>
+            </label>
+          </fieldset>
+
+          <fieldset>
+            <legend>Ports</legend>
+            <div class="oj-row">
+              <label>
+                <span>Web port</span>
+                <input type="number" name="webPort" value="3000" min="1024" max="65535" required>
+              </label>
+              <label>
+                <span>Database port</span>
+                <input type="number" name="dbPort" value="5432" min="1024" max="65535" required>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>LLM provider <span class="oj-optional">optional for now</span></legend>
+            <label>
+              <span>Provider</span>
+              <select name="llmProvider">
+                <option value="anthropic">Anthropic</option>
+                <option value="openai">OpenAI-compatible</option>
+              </select>
+            </label>
+            <label>
+              <span>API key</span>
+              <input type="password" name="llmApiKey" placeholder="sk-…">
+              <small>Required later if you enable the enrichment worker.</small>
+            </label>
+            <label data-depends="llmProvider:openai" hidden>
+              <span>Base URL</span>
+              <input type="url" name="openaiBaseUrl" placeholder="https://api.openai.com/v1">
+            </label>
+          </fieldset>
+        </form>
+
+        <div class="oj-actions">
+          <button class="oj-button oj-button--secondary" data-back>Back</button>
+          <button id="btn-config-next" class="oj-button oj-button--primary">Review</button>
+        </div>
+      </section>
+
+      <!-- Step 4: Review -->
+      <section id="step-review" class="oj-step">
+        <h2 class="oj-step__title">Ready to install</h2>
+        <div class="oj-review" id="review"></div>
+        <div class="oj-actions">
+          <button class="oj-button oj-button--secondary" data-back>Back</button>
+          <button id="btn-install" class="oj-button oj-button--primary">Install OnlineJourno</button>
+        </div>
+      </section>
+
+      <!-- Step 5: Progress -->
+      <section id="step-progress" class="oj-step">
+        <h2 class="oj-step__title">Installing…</h2>
+        <p class="oj-step__deck">This usually takes 3–8 minutes on first run. Do not close this window.</p>
+
+        <div class="oj-progress" aria-live="polite">
+          <div class="oj-progress__bar">
+            <div id="progress-fill" class="oj-progress__fill"></div>
+          </div>
+          <p id="progress-status" class="oj-progress__status">Preparing</p>
+        </div>
+
+        <div id="log" class="oj-log"></div>
+      </section>
+
+      <!-- Step 6: Done -->
+      <section id="step-done" class="oj-step">
+        <h2 class="oj-step__title" id="done-title">Installation complete</h2>
+        <div id="done-body" class="oj-done"></div>
+        <div class="oj-actions">
+          <a id="done-link" href="http://localhost:3000" class="oj-button oj-button--primary" target="_blank">Open OnlineJourno</a>
+          <button id="btn-new" class="oj-button oj-button--secondary">Install another</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="oj-installer__footer">
+      <p>By journalists, for journalists. <a href="https://onlinejourno.com" target="_blank" rel="noopener">onlinejourno.com</a></p>
+    </footer>
+  </div>
+
+  <script src="installer.js"></script>
+</body>
+</html>

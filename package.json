@@ -1,0 +1,15 @@
+{
+  "name": "@onlinejourno/installer",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Downloadable self-host installer for OnlineJourno products. WordPress-style: download, extract, run, click install.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "package": "node scripts/package.mjs"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "license": "FSL-1.1-ALv2"
+}
