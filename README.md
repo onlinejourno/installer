@@ -36,14 +36,14 @@ Newsroom requires a licence key to install. Request one from [onlinejourno.com/c
 | Galley | Coming soon | FSL | [galley.onlinejourno.com](https://galley.onlinejourno.com) | public |
 | Frontmatter | Coming soon | FSL | [frontmatter.onlinejourno.com](https://frontmatter.onlinejourno.com) | public |
 | Loupe | Request access | Proprietary | [loupe.onlinejourno.com](https://loupe.onlinejourno.com) | private |
-| Dispatch | Coming soon | FSL | [dispatch.onlinejourno.com](https://dispatch.onlinejourno.com) | public |
+| Dispatch | Coming soon | FSL | [dispatch.onlinejourno.com](https://dispatch.onlinejourno.com) | private |
 | RegWatch | Request access | Proprietary | [regwatch.onlinejourno.com](https://regwatch.onlinejourno.com) | private |
 | LawWatch | Request access | Proprietary | [lawwatch.onlinejourno.com](https://lawwatch.onlinejourno.com) | private |
 | PolicyWatch | Request access | Proprietary | [policywatch.onlinejourno.com](https://policywatch.onlinejourno.com) | private |
 | TechWatch | Request access | Proprietary | [techwatch.onlinejourno.com](https://techwatch.onlinejourno.com) | private |
 | Pulse | Request access | Proprietary | [onlinejourno.com/in](https://onlinejourno.com/in) | private |
-| Tare | Coming soon | MIT | [tare.onlinejourno.com](https://tare.onlinejourno.com) | public |
-| Forage | Coming soon | MIT | [forage.onlinejourno.com](https://forage.onlinejourno.com) | public |
+| Tare | Coming soon | MIT | [tools.onlinejourno.com/tare](https://tools.onlinejourno.com/tare) | public |
+| Forage | Coming soon | MIT | [tools.onlinejourno.com/crawl-budget-analyser](https://tools.onlinejourno.com/crawl-budget-analyser) | public |
 
 ## Where your data lives
 
