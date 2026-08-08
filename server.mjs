@@ -54,6 +54,14 @@ const PRODUCTS = {
     licence: "FSL-1.1 → Apache 2.0",
     comingSoon: true,
   },
+  pulse: {
+    name: "Pulse",
+    slug: "pulse",
+    description: "Curated editorial digest and briefing (proprietary).",
+    licence: "Proprietary",
+    gated: true,
+    requestUrl: "https://onlinejourno.com/contact/",
+  },
 };
 
 const MIME = {
@@ -360,6 +368,8 @@ const server = createServer(async (req, res) => {
         description: p.description,
         licence: p.licence,
         comingSoon: !!p.comingSoon,
+        gated: !!p.gated,
+        requestUrl: p.requestUrl || null,
       })),
     });
     return;
@@ -395,6 +405,7 @@ const server = createServer(async (req, res) => {
 
     const product = PRODUCTS[inputs.product];
     if (!product) return sendError(res, 400, "Unknown product");
+    if (product.gated) return sendError(res, 403, "Proprietary product — request access via the wizard");
     if (product.comingSoon) return sendError(res, 400, "Product not yet installable via wizard");
     if (!inputs.adminEmail || !inputs.adminPassword || !inputs.outletName) {
       return sendError(res, 400, "Missing required fields");

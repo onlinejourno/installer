@@ -414,6 +414,24 @@ code {
   margin-left: var(--oj-s2);
 }
 
+/* Gated / request access */
+
+.oj-gated {
+  background: var(--oj-paper);
+  border: 1px solid var(--oj-rule-soft);
+  padding: var(--oj-s5);
+  border-radius: var(--oj-radius);
+  margin-bottom: var(--oj-s6);
+}
+
+.oj-gated p {
+  margin: 0 0 var(--oj-s3);
+}
+
+.oj-gated p:last-child {
+  margin-bottom: 0;
+}
+
 /* Review */
 
 .oj-review {

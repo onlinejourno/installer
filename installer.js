@@ -12,7 +12,7 @@ const state = {
   jobId: null,
 };
 
-const steps = ["welcome", "products", "config", "review", "progress", "done"];
+const steps = ["welcome", "products", "gated", "config", "review", "progress", "done"];
 
 const els = {
   wizard: document.getElementById("wizard"),
@@ -22,6 +22,8 @@ const els = {
   btnStart: document.getElementById("btn-start"),
   products: document.getElementById("products"),
   btnProductNext: document.getElementById("btn-product-next"),
+  gatedBody: document.getElementById("gated-body"),
+  btnRequest: document.getElementById("btn-request"),
   configForm: document.getElementById("config-form"),
   btnConfigNext: document.getElementById("btn-config-next"),
   review: document.getElementById("review"),
@@ -66,23 +68,31 @@ async function loadProducts() {
   state.products = products;
   els.products.innerHTML = products
     .map(
-      (p) => `
-      <label class="oj-product ${p.comingSoon ? "is-disabled" : ""}" data-slug="${p.slug}">
+      (p) => {
+        const badge = p.gated
+          ? `<span class="oj-product__badge">Request access</span>`
+          : p.comingSoon
+          ? `<span class="oj-product__badge">Coming soon</span>`
+          : "";
+        return `
+      <label class="oj-product ${p.comingSoon || p.gated ? "" : ""}" data-slug="${p.slug}">
         <input type="radio" name="product" value="${p.slug}" class="oj-product__radio" ${p.comingSoon ? "disabled" : ""}>
         <div>
           <p class="oj-product__name">${escapeHtml(p.name)}</p>
           <p class="oj-product__meta">${escapeHtml(p.licence)}</p>
           <p class="oj-product__desc">${escapeHtml(p.description)}</p>
         </div>
-        ${p.comingSoon ? `<span class="oj-product__badge">Coming soon</span>` : ""}
+        ${badge}
       </label>
-    `
+    `;
+      }
     )
     .join("");
 
-  els.products.querySelectorAll(".oj-product:not(.is-disabled)").forEach((card) => {
+  els.products.querySelectorAll(".oj-product").forEach((card) => {
+    const radio = card.querySelector('input[type="radio"]');
+    if (radio.disabled) return;
     card.addEventListener("click", () => {
-      const radio = card.querySelector('input[type="radio"]');
       radio.checked = true;
       state.selectedProduct = radio.value;
       els.products.querySelectorAll(".oj-product").forEach((c) => c.classList.remove("is-selected"));
@@ -262,7 +272,19 @@ function escapeHtml(str) {
 els.btnCheck.addEventListener("click", runChecks);
 els.btnStart.addEventListener("click", () => showStep("products"));
 
-els.btnProductNext.addEventListener("click", () => showStep("config"));
+els.btnProductNext.addEventListener("click", () => {
+  const product = state.products.find((p) => p.slug === state.selectedProduct);
+  if (product?.gated) {
+    els.gatedBody.innerHTML = `
+      <p><strong>${escapeHtml(product.name)}</strong> is a proprietary OnlineJourno product.</p>
+      <p>To install it in your newsroom, request access. The OnlineJourno team will review your request and follow up.</p>
+    `;
+    els.btnRequest.href = product.requestUrl || "https://onlinejourno.com/contact/";
+    showStep("gated");
+  } else {
+    showStep("config");
+  }
+});
 
 els.btnConfigNext.addEventListener("click", () => {
   if (!validateConfig()) return;

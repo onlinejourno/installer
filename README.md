@@ -32,7 +32,8 @@ A downloadable, WordPress-style installer for self-hosting OnlineJourno products
 | OnlineJourno Newsroom | Available | Flagship editorial-intelligence desk. |
 | Dispatch | Coming soon | Editorial-intelligence dashboard (FSL). |
 | Tare | Coming soon | MIT privacy-and-bloat analyser. |
-| Forage (Crawl-Budget Analyser) | Coming soon | MIT crawler-budget reporter. Live at forage.onlinejourno.com. |
+| Forage (Crawl-Budget Analyser) | Coming soon | MIT crawler-budget reporter. |
+| Pulse | Request access | Proprietary curated digest and briefing. |
 
 ## Where your data lives
 
