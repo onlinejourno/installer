@@ -27,6 +27,8 @@ A downloadable, WordPress-style installer for self-hosting OnlineJourno products
 
 ## Products
 
+Newsroom requires a licence key to install. Request one from [onlinejourno.com/contact](https://onlinejourno.com/contact/). All other proprietary products are available on request.
+
 | Product | Status | Licence | Live URL | Repo |
 |---|---|---|---|---|
 | OnlineJourno Newsroom | Available | Proprietary | [app.onlinejourno.com](https://app.onlinejourno.com) | private |

@@ -141,6 +141,15 @@
               <input type="url" name="openaiBaseUrl" placeholder="https://api.openai.com/v1">
             </label>
           </fieldset>
+
+          <fieldset id="license-fieldset" hidden>
+            <legend>Newsroom licence key</legend>
+            <label>
+              <span>Licence key</span>
+              <input type="text" name="licenseKey" placeholder="OJNR-XXXX-XXXX-XXXX-XXXX" pattern="OJNR-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}" title="Format: OJNR-XXXX-XXXX-XXXX-XXXX">
+              <small>Required to install the proprietary flagship. Request one from <a href="https://onlinejourno.com/contact/" target="_blank" rel="noopener">OnlineJourno</a>.</small>
+            </label>
+          </fieldset>
         </form>
 
         <div class="oj-actions">

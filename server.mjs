@@ -168,6 +168,10 @@ function sendError(res, status, message) {
   send(res, status, { ok: false, error: message });
 }
 
+function isValidLicenseKey(key) {
+  return typeof key === "string" && /^OJNR-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(key.trim());
+}
+
 async function staticFile(pathname) {
   const safe = pathname.replace(/\.{2,}/g, "").replace(/^\/+/, "") || "index.html";
   const filePath = join(__dirname, safe);
@@ -494,6 +498,9 @@ const server = createServer(async (req, res) => {
     if (!product) return sendError(res, 400, "Unknown product");
     if (product.gated) return sendError(res, 403, "Proprietary product — request access via the wizard");
     if (product.comingSoon) return sendError(res, 400, "Product not yet installable via wizard");
+    if (product.licence === "Proprietary" && !isValidLicenseKey(inputs.licenseKey)) {
+      return sendError(res, 403, "A valid licence key is required for this product");
+    }
     if (!inputs.adminEmail || !inputs.adminPassword || !inputs.outletName) {
       return sendError(res, 400, "Missing required fields");
     }

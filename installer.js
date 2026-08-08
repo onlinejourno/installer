@@ -25,6 +25,7 @@ const els = {
   gatedBody: document.getElementById("gated-body"),
   btnRequest: document.getElementById("btn-request"),
   configForm: document.getElementById("config-form"),
+  licenseFieldset: document.getElementById("license-fieldset"),
   btnConfigNext: document.getElementById("btn-config-next"),
   review: document.getElementById("review"),
   btnInstall: document.getElementById("btn-install"),
@@ -148,12 +149,16 @@ function collectConfig() {
     llmProvider: data.get("llmProvider"),
     llmApiKey: data.get("llmApiKey").trim(),
     openaiBaseUrl: data.get("openaiBaseUrl").trim(),
+    licenseKey: data.get("licenseKey")?.trim() || "",
   };
 }
 
 function renderReview() {
   const c = state.config;
   const p = state.products.find((x) => x.slug === state.selectedProduct);
+  const licenseLine = p.licence === "Proprietary" && !p.gated
+    ? `<dt>Licence key</dt><dd>${c.licenseKey ? "Provided" : "Missing"}</dd>`
+    : "";
   els.review.innerHTML = `
     <dl>
       <dt>Product</dt><dd>${escapeHtml(p.name)}</dd>
@@ -162,12 +167,28 @@ function renderReview() {
       <dt>Web URL</dt><dd>http://localhost:${escapeHtml(c.webPort)}</dd>
       <dt>Database port</dt><dd>${escapeHtml(c.dbPort)}</dd>
       <dt>LLM provider</dt><dd>${escapeHtml(c.llmProvider)} ${c.llmApiKey ? "(key set)" : "(skipped)"}</dd>
+      ${licenseLine}
     </dl>
   `;
 }
 
 function validateConfig() {
-  return els.configForm.reportValidity();
+  const product = state.products.find((p) => p.slug === state.selectedProduct);
+  const formValid = els.configForm.reportValidity();
+  if (!formValid) return false;
+
+  if (product?.licence === "Proprietary" && !product.gated) {
+    const key = els.configForm.querySelector("[name='licenseKey']").value.trim();
+    if (!isValidLicenseKey(key)) {
+      alert("Please enter a valid Newsroom licence key (format: OJNR-XXXX-XXXX-XXXX-XXXX).");
+      return false;
+    }
+  }
+  return true;
+}
+
+function isValidLicenseKey(key) {
+  return /^OJNR-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(key);
 }
 
 async function startInstall() {
@@ -282,6 +303,11 @@ els.btnProductNext.addEventListener("click", () => {
     els.btnRequest.href = product.requestUrl || "https://onlinejourno.com/contact/";
     showStep("gated");
   } else {
+    if (els.licenseFieldset) {
+      const needsKey = product?.licence === "Proprietary";
+      els.licenseFieldset.hidden = !needsKey;
+      els.licenseFieldset.querySelector("[name='licenseKey']").required = needsKey;
+    }
     showStep("config");
   }
 });
