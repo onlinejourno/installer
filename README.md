@@ -27,21 +27,21 @@ A downloadable, WordPress-style installer for self-hosting OnlineJourno products
 
 ## Products
 
-| Product | Status | Notes |
-|---|---|---|
-| OnlineJourno Newsroom | Request access | Proprietary flagship editorial-intelligence desk. |
-| Daybook | Coming soon | FSL editorial calendar. |
-| Galley | Coming soon | FSL story report tool. |
-| Frontmatter | Coming soon | FSL merit↔reach engine. |
-| Loupe | Request access | Proprietary frame analyser. |
-| Dispatch | Coming soon | FSL editorial-intelligence dashboard. |
-| RegWatch | Request access | Proprietary regulatory signal watch. |
-| LawWatch | Request access | Proprietary legal signal watch. |
-| PolicyWatch | Request access | Proprietary policy signal watch. |
-| TechWatch | Request access | Proprietary technology signal watch. |
-| Pulse | Request access | Proprietary curated digest and briefing. |
-| Tare | Coming soon | MIT privacy-and-bloat analyser. |
-| Forage | Coming soon | MIT crawl-budget reporter. |
+| Product | Status | Licence | Live URL | Repo |
+|---|---|---|---|---|
+| OnlineJourno Newsroom | Request access | Proprietary | [app.onlinejourno.com](https://app.onlinejourno.com) | private |
+| Daybook | Coming soon | FSL | [daybook.onlinejourno.com](https://daybook.onlinejourno.com) | public |
+| Galley | Coming soon | FSL | [galley.onlinejourno.com](https://galley.onlinejourno.com) | public |
+| Frontmatter | Coming soon | FSL | [frontmatter.onlinejourno.com](https://frontmatter.onlinejourno.com) | public |
+| Loupe | Request access | Proprietary | [loupe.onlinejourno.com](https://loupe.onlinejourno.com) | private |
+| Dispatch | Coming soon | FSL | [dispatch.onlinejourno.com](https://dispatch.onlinejourno.com) | public |
+| RegWatch | Request access | Proprietary | [regwatch.onlinejourno.com](https://regwatch.onlinejourno.com) | private |
+| LawWatch | Request access | Proprietary | [lawwatch.onlinejourno.com](https://lawwatch.onlinejourno.com) | private |
+| PolicyWatch | Request access | Proprietary | [policywatch.onlinejourno.com](https://policywatch.onlinejourno.com) | private |
+| TechWatch | Request access | Proprietary | [techwatch.onlinejourno.com](https://techwatch.onlinejourno.com) | private |
+| Pulse | Request access | Proprietary | [onlinejourno.com/in](https://onlinejourno.com/in) | private |
+| Tare | Coming soon | MIT | [tare.onlinejourno.com](https://tare.onlinejourno.com) | public |
+| Forage | Coming soon | MIT | [forage.onlinejourno.com](https://forage.onlinejourno.com) | public |
 
 ## Where your data lives
 

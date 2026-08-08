@@ -21,6 +21,7 @@ const PRODUCTS = {
     name: "OnlineJourno Newsroom",
     slug: "newsroom",
     repo: "https://github.com/onlinejourno/newsroom.git",
+    liveUrl: "https://app.onlinejourno.com",
     description: "The flagship editorial-intelligence desk.",
     licence: "Proprietary",
     gated: true,
@@ -29,6 +30,8 @@ const PRODUCTS = {
   daybook: {
     name: "Daybook",
     slug: "daybook",
+    repo: "https://github.com/onlinejourno/daybook.git",
+    liveUrl: "https://daybook.onlinejourno.com",
     description: "Editorial calendar and planning desk (FSL).",
     licence: "FSL-1.1 → Apache 2.0",
     comingSoon: true,
@@ -36,6 +39,8 @@ const PRODUCTS = {
   galley: {
     name: "Galley",
     slug: "galley",
+    repo: "https://github.com/onlinejourno/galley.git",
+    liveUrl: "https://galley.onlinejourno.com",
     description: "Story report and copy-fit tool (FSL).",
     licence: "FSL-1.1 → Apache 2.0",
     comingSoon: true,
@@ -43,6 +48,8 @@ const PRODUCTS = {
   frontmatter: {
     name: "Frontmatter",
     slug: "frontmatter",
+    repo: "https://github.com/onlinejourno/frontmatter.git",
+    liveUrl: "https://frontmatter.onlinejourno.com",
     description: "Merit↔reach distribution-fit engine (FSL).",
     licence: "FSL-1.1 → Apache 2.0",
     comingSoon: true,
@@ -50,6 +57,7 @@ const PRODUCTS = {
   loupe: {
     name: "Loupe",
     slug: "loupe",
+    liveUrl: "https://loupe.onlinejourno.com",
     description: "Frame and editorial-lens analyser (proprietary).",
     licence: "Proprietary",
     gated: true,
@@ -58,6 +66,8 @@ const PRODUCTS = {
   dispatch: {
     name: "Dispatch",
     slug: "dispatch",
+    repo: "https://github.com/onlinejourno/dispatch.git",
+    liveUrl: "https://dispatch.onlinejourno.com",
     description: "Editorial-intelligence dashboard (FSL).",
     licence: "FSL-1.1 → Apache 2.0",
     comingSoon: true,
@@ -65,6 +75,7 @@ const PRODUCTS = {
   regwatch: {
     name: "RegWatch",
     slug: "regwatch",
+    liveUrl: "https://regwatch.onlinejourno.com",
     description: "Regulatory and policy signal watch (proprietary).",
     licence: "Proprietary",
     gated: true,
@@ -73,6 +84,7 @@ const PRODUCTS = {
   lawwatch: {
     name: "LawWatch",
     slug: "lawwatch",
+    liveUrl: "https://lawwatch.onlinejourno.com",
     description: "Legal and judiciary signal watch (proprietary).",
     licence: "Proprietary",
     gated: true,
@@ -81,6 +93,7 @@ const PRODUCTS = {
   policywatch: {
     name: "PolicyWatch",
     slug: "policywatch",
+    liveUrl: "https://policywatch.onlinejourno.com",
     description: "Government and policy signal watch (proprietary).",
     licence: "Proprietary",
     gated: true,
@@ -89,6 +102,7 @@ const PRODUCTS = {
   techwatch: {
     name: "TechWatch",
     slug: "techwatch",
+    liveUrl: "https://techwatch.onlinejourno.com",
     description: "Technology and platform signal watch (proprietary).",
     licence: "Proprietary",
     gated: true,
@@ -97,6 +111,7 @@ const PRODUCTS = {
   pulse: {
     name: "Pulse",
     slug: "pulse",
+    liveUrl: "https://onlinejourno.com/in",
     description: "Curated editorial digest and briefing (proprietary).",
     licence: "Proprietary",
     gated: true,
@@ -106,6 +121,7 @@ const PRODUCTS = {
     name: "Tare",
     slug: "tare",
     repo: "https://github.com/onlinejourno/tare.git",
+    liveUrl: "https://tare.onlinejourno.com",
     description: "Privacy-and-bloat page analyser (MIT).",
     licence: "MIT",
     comingSoon: true,
@@ -113,6 +129,8 @@ const PRODUCTS = {
   forage: {
     name: "Forage",
     slug: "forage",
+    repo: "https://github.com/onlinejourno/crawl-budget-analyser.git",
+    liveUrl: "https://forage.onlinejourno.com",
     description: "Crawl-budget and crawler-attention reporter (MIT).",
     licence: "MIT",
     comingSoon: true,
@@ -425,6 +443,8 @@ const server = createServer(async (req, res) => {
         comingSoon: !!p.comingSoon,
         gated: !!p.gated,
         requestUrl: p.requestUrl || null,
+        liveUrl: p.liveUrl || null,
+        repoUrl: p.repo || null,
       })),
     });
     return;
