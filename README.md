@@ -29,7 +29,7 @@ A downloadable, WordPress-style installer for self-hosting OnlineJourno products
 
 | Product | Status | Licence | Live URL | Repo |
 |---|---|---|---|---|
-| OnlineJourno Newsroom | Request access | Proprietary | [app.onlinejourno.com](https://app.onlinejourno.com) | private |
+| OnlineJourno Newsroom | Available | Proprietary | [app.onlinejourno.com](https://app.onlinejourno.com) | private |
 | Daybook | Coming soon | FSL | [daybook.onlinejourno.com](https://daybook.onlinejourno.com) | public |
 | Galley | Coming soon | FSL | [galley.onlinejourno.com](https://galley.onlinejourno.com) | public |
 | Frontmatter | Coming soon | FSL | [frontmatter.onlinejourno.com](https://frontmatter.onlinejourno.com) | public |

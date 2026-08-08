@@ -24,8 +24,20 @@ const PRODUCTS = {
     liveUrl: "https://app.onlinejourno.com",
     description: "The flagship editorial-intelligence desk.",
     licence: "Proprietary",
-    gated: true,
-    requestUrl: "https://onlinejourno.com/contact/",
+    composeFile: "docker-compose.yml",
+    bootstrap: {
+      service: "web",
+      command: ["node", "apps/web/scripts/bootstrap.mjs"],
+    },
+    envDefaults: {
+      WEB_PORT: "3000",
+      DB_PORT: "5432",
+      POSTGRES_PASSWORD: "onlinejourno",
+      NEXT_PUBLIC_PRODUCT_NAME: "OnlineJourno",
+      LLM_PROVIDER: "anthropic",
+    },
+    requiredEnv: ["SESSION_SECRET"],
+    optionalEnv: ["ANTHROPIC_API_KEY", "OPENAI_API_KEY", "OPENAI_BASE_URL", "KEYWORDS_EVERYWHERE_API_KEY"],
   },
   daybook: {
     name: "Daybook",
