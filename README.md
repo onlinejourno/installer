@@ -29,11 +29,19 @@ A downloadable, WordPress-style installer for self-hosting OnlineJourno products
 
 | Product | Status | Notes |
 |---|---|---|
-| OnlineJourno Newsroom | Available | Flagship editorial-intelligence desk. |
-| Dispatch | Coming soon | Editorial-intelligence dashboard (FSL). |
-| Tare | Coming soon | MIT privacy-and-bloat analyser. |
-| Forage (Crawl-Budget Analyser) | Coming soon | MIT crawler-budget reporter. |
+| OnlineJourno Newsroom | Request access | Proprietary flagship editorial-intelligence desk. |
+| Daybook | Coming soon | FSL editorial calendar. |
+| Galley | Coming soon | FSL story report tool. |
+| Frontmatter | Coming soon | FSL merit↔reach engine. |
+| Loupe | Coming soon | FSL frame analyser. |
+| Dispatch | Coming soon | FSL editorial-intelligence dashboard. |
+| RegWatch | Request access | Proprietary regulatory signal watch. |
+| LawWatch | Request access | Proprietary legal signal watch. |
+| PolicyWatch | Request access | Proprietary policy signal watch. |
+| TechWatch | Request access | Proprietary technology signal watch. |
 | Pulse | Request access | Proprietary curated digest and briefing. |
+| Tare | Coming soon | MIT privacy-and-bloat analyser. |
+| Forage | Coming soon | MIT crawl-budget reporter. |
 
 ## Where your data lives
 
