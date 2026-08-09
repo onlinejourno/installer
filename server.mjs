@@ -78,6 +78,7 @@ const PRODUCTS = {
   dispatch: {
     name: "Dispatch",
     slug: "dispatch",
+    repo: "https://github.com/onlinejourno/dispatch.git",
     liveUrl: "https://dispatch.onlinejourno.com",
     description: "Editorial-intelligence dashboard (FSL).",
     licence: "FSL-1.1 → Apache 2.0",
@@ -140,7 +141,7 @@ const PRODUCTS = {
   forage: {
     name: "Forage",
     slug: "forage",
-    repo: "https://github.com/onlinejourno/crawl-budget-analyser.git",
+    repo: "https://github.com/onlinejourno/tools.git",
     liveUrl: "https://tools.onlinejourno.com/crawl-budget-analyser",
     description: "Crawl-budget and crawler-attention reporter (MIT).",
     licence: "MIT",
