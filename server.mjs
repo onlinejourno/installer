@@ -2,7 +2,7 @@
 // Serves the wizard UI and runs Docker Compose on the user's behalf.
 // Zero runtime dependencies beyond Node 18+.
 
-import { createServer } from "node:http";
+import { createServer, request as httpRequest } from "node:http";
 import { readFile, stat, access, constants } from "node:fs/promises";
 import { spawn } from "node:child_process";
 import { randomUUID } from "node:crypto";
@@ -189,6 +189,76 @@ function sendError(res, status, message) {
 
 function isValidLicenseKey(key) {
   return typeof key === "string" && /^OJNR-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(key.trim());
+}
+
+function isPortFree(port) {
+  return new Promise((resolve) => {
+    const probe = createServer();
+    probe.once("error", (err) => {
+      probe.close();
+      resolve(err.code === "EADDRINUSE" ? false : false);
+    });
+    probe.once("listening", () => {
+      probe.close();
+      resolve(true);
+    });
+    probe.listen(Number(port), HOST);
+  });
+}
+
+function waitForHealth(url, options = {}) {
+  const { timeout = 120_000, interval = 2_000 } = options;
+  const start = Date.now();
+  return new Promise((resolve, reject) => {
+    const attempt = () => {
+      const req = createHttpRequest(url, (res) => {
+        if (res.statusCode && res.statusCode < 500) {
+          resolve({ ok: true, statusCode: res.statusCode });
+        } else {
+          scheduleNext();
+        }
+      });
+      req.on("error", scheduleNext);
+      req.setTimeout(5_000, () => {
+        req.destroy();
+        scheduleNext();
+      });
+      req.end();
+    };
+
+    const scheduleNext = () => {
+      if (Date.now() - start > timeout) {
+        reject(new Error(`Health check timed out after ${timeout / 1000}s`));
+        return;
+      }
+      setTimeout(attempt, interval);
+    };
+
+    attempt();
+  });
+}
+
+function createHttpRequest(url, callback) {
+  return httpRequest(url, callback);
+}
+
+function classifyInstallError(err, product) {
+  const text = `${err?.message || ""} ${err?.stderr || ""} ${err?.stdout || ""}`.toLowerCase();
+  const port = product?.envDefaults?.WEB_PORT || "3000";
+
+  if (text.includes("eaddrinuse") || text.includes("already in use") || text.includes("bind: address already in use")) {
+    return `Port ${port} (or another required port) is already in use. Pick a different port and try again.`;
+  }
+  if (text.includes("cannot connect to the docker daemon") || text.includes("docker daemon")) {
+    return "Docker is not running. Start Docker Desktop or the Docker service, then try again.";
+  }
+  if (text.includes("no such file or directory") && text.includes("dockerfile")) {
+    return "The product source is missing a Dockerfile. Try deleting the product folder and installing again.";
+  }
+  if (text.includes("timed out") || text.includes("timeout")) {
+    return "The operation timed out. This usually means a slow network or a service that failed to start. Check the log above.";
+  }
+  return err?.message || "Installation failed. Check the log above for details.";
 }
 
 async function staticFile(pathname) {
@@ -439,6 +509,18 @@ async function runInstall(job, product, inputs) {
       onLine: (line) => log(line.trimEnd()),
     });
 
+    const targetUrl = `http://localhost:${inputs.webPort || product.envDefaults?.WEB_PORT || "3000"}`;
+    job.status = "health-check";
+    log(`Waiting for ${product.name} to respond at ${targetUrl}…`);
+    try {
+      await waitForHealth(targetUrl, { timeout: 120_000, interval: 2_000 });
+      log(`${product.name} is responding.`);
+    } catch (healthErr) {
+      throw Object.assign(new Error(`${product.name} started but did not respond in time. Check the log above.`), {
+        cause: healthErr,
+      });
+    }
+
     if (product.bootstrap) {
       job.status = "bootstrapping";
       log("Creating your newsroom and admin account…");
@@ -457,14 +539,15 @@ async function runInstall(job, product, inputs) {
     log("Installation complete.");
   } catch (err) {
     job.status = "failed";
-    const message = err?.message || String(err);
+    const message = classifyInstallError(err, product);
     log(`ERROR: ${message}`);
     if (err?.stderr) log(err.stderr);
     if (err?.stdout) log(err.stdout);
+    job.error = message;
   } finally {
     job.listeners.forEach((res) => {
       try {
-        res.write(`data: ${JSON.stringify({ time: Date.now(), done: true, status: job.status, result: job.result })}\n\n`);
+        res.write(`data: ${JSON.stringify({ time: Date.now(), done: true, status: job.status, result: job.result, error: job.error || null })}\n\n`);
         res.end();
       } catch {
         // ignore
@@ -542,6 +625,17 @@ const server = createServer(async (req, res) => {
     return;
   }
 
+  // API: port availability check.
+  if (pathname === "/api/port-check" && req.method === "GET") {
+    const port = Number(url.searchParams.get("port"));
+    if (!port || port < 1024 || port > 65535) {
+      return sendError(res, 400, "Invalid port");
+    }
+    const free = await isPortFree(port);
+    send(res, 200, { ok: free, port, free });
+    return;
+  }
+
   // API: start install.
   if (pathname === "/api/install" && req.method === "POST") {
     let body = "";
@@ -562,6 +656,16 @@ const server = createServer(async (req, res) => {
     }
     if (product.needsAdmin && (!inputs.adminEmail || !inputs.adminPassword || !inputs.outletName)) {
       return sendError(res, 400, "Missing required fields");
+    }
+
+    const webPort = Number(inputs.webPort || product.envDefaults?.WEB_PORT || "3000");
+    if (!(await isPortFree(webPort))) {
+      return sendError(res, 409, `Port ${webPort} is already in use. Choose a different port.`);
+    }
+
+    const projectRoot = resolve(process.cwd(), product.slug);
+    if (await fileExists(join(projectRoot, product.composeFile)).catch(() => false)) {
+      return sendError(res, 409, `A ${product.name} folder already exists here. Delete it or install in a different directory.`);
     }
 
     const id = randomUUID();
@@ -599,7 +703,7 @@ const server = createServer(async (req, res) => {
     }
 
     if (job.status === "done" || job.status === "failed") {
-      res.write(`data: ${JSON.stringify({ time: Date.now(), done: true, status: job.status, result: job.result })}\n\n`);
+      res.write(`data: ${JSON.stringify({ time: Date.now(), done: true, status: job.status, result: job.result, error: job.error || null })}\n\n`);
       res.end();
       return;
     }

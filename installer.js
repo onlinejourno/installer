@@ -31,6 +31,8 @@ const els = {
   newsroomFieldset: document.getElementById("newsroom-fieldset"),
   adminFieldset: document.getElementById("admin-fieldset"),
   portsFieldset: document.getElementById("ports-fieldset"),
+  btnCheckPort: document.getElementById("btn-check-port"),
+  portCheckStatus: document.getElementById("port-check-status"),
   llmFieldset: document.getElementById("llm-fieldset"),
   connectorsFieldset: document.getElementById("connectors-fieldset"),
   btnConfigNext: document.getElementById("btn-config-next"),
@@ -194,7 +196,34 @@ function renderReview() {
   `;
 }
 
-function validateConfig() {
+async function checkPort() {
+  const port = els.configForm.querySelector("[name='webPort']")?.value;
+  if (!port) return false;
+
+  els.btnCheckPort.disabled = true;
+  els.portCheckStatus.textContent = "Checking…";
+  els.portCheckStatus.className = "oj-port-check__status";
+
+  try {
+    const { free } = await api(`/api/port-check?port=${encodeURIComponent(port)}`);
+    if (free) {
+      els.portCheckStatus.textContent = `Port ${port} is available`;
+      els.portCheckStatus.classList.add("is-pass");
+      return true;
+    }
+    els.portCheckStatus.textContent = `Port ${port} is already in use`;
+    els.portCheckStatus.classList.add("is-fail");
+    return false;
+  } catch (err) {
+    els.portCheckStatus.textContent = err.message || "Could not check port";
+    els.portCheckStatus.classList.add("is-fail");
+    return false;
+  } finally {
+    els.btnCheckPort.disabled = false;
+  }
+}
+
+async function validateConfig() {
   const product = state.products.find((p) => p.slug === state.selectedProduct);
   const formValid = els.configForm.reportValidity();
   if (!formValid) return false;
@@ -205,6 +234,12 @@ function validateConfig() {
       alert("Please enter a valid Newsroom licence key (format: OJNR-XXXX-XXXX-XXXX-XXXX).");
       return false;
     }
+  }
+
+  const portFree = await checkPort();
+  if (!portFree) {
+    alert("The chosen web port is not available. Pick a different port or check what is using it.");
+    return false;
   }
   return true;
 }
@@ -241,7 +276,7 @@ function streamLogs(id) {
     const data = JSON.parse(e.data);
     if (data.done) {
       source.close();
-      showDone(data.status === "done", data.result);
+      showDone(data.status === "done", data.result, data.error);
       return;
     }
     logLine(data.line);
@@ -271,11 +306,12 @@ function updateProgressFromStatus(line) {
   if (line.includes("Preparing")) setProgress(10, "Preparing");
   else if (line.includes("Writing .env")) setProgress(20, "Writing configuration");
   else if (line.includes("Building")) setProgress(40, "Building containers");
-  else if (line.includes("bootstrap")) setProgress(80, "Creating admin account");
+  else if (line.includes("health-check")) setProgress(70, "Waiting for service to respond");
+  else if (line.includes("bootstrap")) setProgress(85, "Creating admin account");
   else if (line.includes("complete")) setProgress(100, "Finishing");
 }
 
-function showDone(ok, result = null) {
+function showDone(ok, result = null, error = null) {
   const product = state.products.find((p) => p.slug === state.selectedProduct);
   const productName = product?.name || "OnlineJourno";
 
@@ -299,8 +335,11 @@ function showDone(ok, result = null) {
     els.doneLink.textContent = `Open ${escapeHtml(productName)}`;
   } else {
     els.doneTitle.textContent = "Installation failed";
+    const reason = error
+      ? `<p><strong>${escapeHtml(error)}</strong></p>`
+      : "<p>Something went wrong. Check the log above for details.</p>";
     els.doneBody.innerHTML = `
-      <p>Something went wrong. Check the log above for details.</p>
+      ${reason}
       <p>Common fixes:</p>
       <ul>
         <li>Make sure Docker Desktop is running.</li>
@@ -388,8 +427,10 @@ els.btnProductNext.addEventListener("click", () => {
   }
 });
 
-els.btnConfigNext.addEventListener("click", () => {
-  if (!validateConfig()) return;
+els.btnCheckPort?.addEventListener("click", checkPort);
+
+els.btnConfigNext.addEventListener("click", async () => {
+  if (!(await validateConfig())) return;
   state.config = collectConfig();
   renderReview();
   showStep("review");

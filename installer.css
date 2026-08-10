@@ -422,6 +422,26 @@ code {
   gap: var(--oj-s4);
 }
 
+.oj-port-check {
+  display: flex;
+  align-items: center;
+  gap: var(--oj-s3);
+  margin-top: var(--oj-s3);
+}
+
+.oj-port-check__status {
+  font-family: var(--oj-font-ui);
+  font-size: 0.875rem;
+}
+
+.oj-port-check__status.is-pass {
+  color: var(--oj-pass);
+}
+
+.oj-port-check__status.is-fail {
+  color: var(--oj-fail);
+}
+
 .oj-optional {
   font-family: var(--oj-font-ui);
   font-size: 0.75rem;
