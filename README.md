@@ -45,7 +45,7 @@ Newsroom requires a licence key to install. Request one from [onlinejourno.com/c
 | Tare | Available | MIT | [tools.onlinejourno.com/tare](https://tools.onlinejourno.com/tare) | public |
 | Forage | Available | MIT | [tools.onlinejourno.com/crawl-budget-analyser](https://tools.onlinejourno.com/crawl-budget-analyser) | public (in onlinejourno/tools) |
 
-**Note:** Daybook, Galley, Frontmatter, Dispatch, Tare and Forage were recently wired into the installer. Their `docker-compose` branches need to be merged to `main` in each repo before the installer can clone and run them.
+**Note:** Daybook, Galley, Frontmatter, Dispatch, Tare and Forage are all installable via the wizard. Each repo's `main` branch now includes a `docker-compose.yml` that honours the `WEB_PORT` environment variable.
 
 ## Where your data lives
 
