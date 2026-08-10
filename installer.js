@@ -32,6 +32,7 @@ const els = {
   adminFieldset: document.getElementById("admin-fieldset"),
   portsFieldset: document.getElementById("ports-fieldset"),
   llmFieldset: document.getElementById("llm-fieldset"),
+  connectorsFieldset: document.getElementById("connectors-fieldset"),
   btnConfigNext: document.getElementById("btn-config-next"),
   review: document.getElementById("review"),
   btnInstall: document.getElementById("btn-install"),
@@ -159,6 +160,9 @@ function collectConfig() {
     cfg.llmProvider = data.get("llmProvider");
     cfg.llmApiKey = data.get("llmApiKey").trim();
     cfg.openaiBaseUrl = data.get("openaiBaseUrl").trim();
+    cfg.keywordsEverywhereApiKey = data.get("keywordsEverywhereApiKey")?.trim() || "";
+    cfg.dataforseoLogin = data.get("dataforseoLogin")?.trim() || "";
+    cfg.dataforseoPassword = data.get("dataforseoPassword")?.trim() || "";
   }
 
   return cfg;
@@ -170,12 +174,14 @@ function renderReview() {
   const licenseLine = p.licence === "Proprietary" && !p.gated
     ? `<dt>Licence key</dt><dd>${c.licenseKey ? "Provided" : "Missing"}</dd>`
     : "";
+  const hasConnectorKey = c.keywordsEverywhereApiKey || c.dataforseoLogin || c.dataforseoPassword;
   const adminLines = p.needsAdmin
     ? `
       <dt>Newsroom</dt><dd>${escapeHtml(c.outletName)}</dd>
       <dt>Admin email</dt><dd>${escapeHtml(c.adminEmail)}</dd>
       <dt>Database port</dt><dd>${escapeHtml(c.dbPort)}</dd>
       <dt>LLM provider</dt><dd>${escapeHtml(c.llmProvider)} ${c.llmApiKey ? "(key set)" : "(skipped)"}</dd>
+      <dt>SEO connectors</dt><dd>${hasConnectorKey ? "Key(s) set" : "Skipped"}</dd>
     `
     : "";
   els.review.innerHTML = `
@@ -354,6 +360,10 @@ function configureFormForProduct(product) {
 
   if (els.llmFieldset) {
     els.llmFieldset.hidden = !needsAdmin;
+  }
+
+  if (els.connectorsFieldset) {
+    els.connectorsFieldset.hidden = !needsAdmin;
   }
 
   if (els.licenseFieldset) {

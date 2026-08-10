@@ -367,6 +367,13 @@ code {
   margin-bottom: var(--oj-s4);
 }
 
+.oj-fieldset-help {
+  font-family: var(--oj-font-ui);
+  font-size: 0.875rem;
+  color: var(--oj-fg-2);
+  margin: calc(-1 * var(--oj-s2)) 0 var(--oj-s4);
+}
+
 .oj-form label {
   display: block;
   margin-bottom: var(--oj-s4);
