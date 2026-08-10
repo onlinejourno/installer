@@ -32,18 +32,20 @@ Newsroom requires a licence key to install. Request one from [onlinejourno.com/c
 | Product | Status | Licence | Live URL | Repo |
 |---|---|---|---|---|
 | OnlineJourno Newsroom | Available | Proprietary | [app.onlinejourno.com](https://app.onlinejourno.com) | private |
-| Daybook | Coming soon | FSL | [daybook.onlinejourno.com](https://daybook.onlinejourno.com) | public |
-| Galley | Coming soon | FSL | [galley.onlinejourno.com](https://galley.onlinejourno.com) | public |
-| Frontmatter | Coming soon | FSL | [frontmatter.onlinejourno.com](https://frontmatter.onlinejourno.com) | public |
+| Daybook | Available | FSL | [daybook.onlinejourno.com](https://daybook.onlinejourno.com) | public |
+| Galley | Available | FSL | [galley.onlinejourno.com](https://galley.onlinejourno.com) | public |
+| Frontmatter | Available | FSL | [frontmatter.onlinejourno.com](https://frontmatter.onlinejourno.com) | public |
 | Loupe | Request access | Proprietary | [loupe.onlinejourno.com](https://loupe.onlinejourno.com) | private |
-| Dispatch | Coming soon | FSL | [dispatch.onlinejourno.com](https://dispatch.onlinejourno.com) | public |
+| Dispatch | Available | FSL | [dispatch.onlinejourno.com](https://dispatch.onlinejourno.com) | public |
 | RegWatch | Request access | Proprietary | [regwatch.onlinejourno.com](https://regwatch.onlinejourno.com) | private |
 | LawWatch | Request access | Proprietary | [lawwatch.onlinejourno.com](https://lawwatch.onlinejourno.com) | private |
 | PolicyWatch | Request access | Proprietary | [policywatch.onlinejourno.com](https://policywatch.onlinejourno.com) | private |
 | TechWatch | Request access | Proprietary | [techwatch.onlinejourno.com](https://techwatch.onlinejourno.com) | private |
 | Pulse | Request access | Proprietary | [onlinejourno.com/in](https://onlinejourno.com/in) | private |
-| Tare | Coming soon | MIT | [tools.onlinejourno.com/tare](https://tools.onlinejourno.com/tare) | public |
-| Forage | Coming soon | MIT | [tools.onlinejourno.com/crawl-budget-analyser](https://tools.onlinejourno.com/crawl-budget-analyser) | public (in onlinejourno/tools) |
+| Tare | Available | MIT | [tools.onlinejourno.com/tare](https://tools.onlinejourno.com/tare) | public |
+| Forage | Available | MIT | [tools.onlinejourno.com/crawl-budget-analyser](https://tools.onlinejourno.com/crawl-budget-analyser) | public (in onlinejourno/tools) |
+
+**Note:** Daybook, Galley, Frontmatter, Dispatch, Tare and Forage were recently wired into the installer. Their `docker-compose` branches need to be merged to `main` in each repo before the installer can clone and run them.
 
 ## Where your data lives
 

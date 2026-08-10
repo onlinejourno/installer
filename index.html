@@ -78,11 +78,11 @@
 
       <!-- Step 4: Configure -->
       <section id="step-config" class="oj-step">
-        <h2 class="oj-step__title">Configure your newsroom</h2>
-        <p class="oj-step__deck">These values are stored only in the <code>.env</code> file on your machine.</p>
+        <h2 id="config-title" class="oj-step__title">Configure your newsroom</h2>
+        <p id="config-deck" class="oj-step__deck">These values are stored only in the <code>.env</code> file on your machine.</p>
 
         <form id="config-form" class="oj-form" novalidate>
-          <fieldset>
+          <fieldset id="newsroom-fieldset">
             <legend>Newsroom</legend>
             <label>
               <span>Newsroom name</span>
@@ -95,7 +95,7 @@
             </label>
           </fieldset>
 
-          <fieldset>
+          <fieldset id="admin-fieldset">
             <legend>Admin account</legend>
             <label>
               <span>Admin email</span>
@@ -108,7 +108,7 @@
             </label>
           </fieldset>
 
-          <fieldset>
+          <fieldset id="ports-fieldset">
             <legend>Ports</legend>
             <div class="oj-row">
               <label>
@@ -122,7 +122,7 @@
             </div>
           </fieldset>
 
-          <fieldset>
+          <fieldset id="llm-fieldset">
             <legend>LLM provider <span class="oj-optional">optional for now</span></legend>
             <label>
               <span>Provider</span>

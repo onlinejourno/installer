@@ -292,14 +292,19 @@ code {
   background: var(--oj-paper);
 }
 
-.oj-product.is-selected {
+.oj-product.is-selected,
+.oj-product--selectable.is-selected {
   border-color: var(--oj-accent-strong);
   background: var(--oj-accent-soft);
 }
 
-.oj-product.is-disabled {
+.oj-product--disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.oj-product--selectable:hover {
+  border-color: var(--oj-accent-strong);
 }
 
 .oj-product__radio {
@@ -339,6 +344,12 @@ code {
   background: var(--oj-paper-2);
   border-radius: var(--oj-radius);
   color: var(--oj-fg-3);
+  white-space: nowrap;
+}
+
+.oj-product__badge--available {
+  background: rgba(21, 115, 71, 0.12);
+  color: var(--oj-pass);
 }
 
 /* Form */
