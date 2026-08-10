@@ -51,9 +51,6 @@ const PRODUCTS = {
     envDefaults: {
       WEB_PORT: "8080",
     },
-    // Repo is still private; the wizard cannot clone it for public self-hosters.
-    // Drop this flag once github.com/onlinejourno/daybook is public.
-    comingSoon: true,
   },
   galley: {
     name: "Galley",
