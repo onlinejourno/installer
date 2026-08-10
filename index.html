@@ -163,6 +163,93 @@
             </label>
           </fieldset>
 
+          <details class="oj-details" id="more-connectors-details">
+            <summary>More connectors (GSC, GA4, analytics, trends)</summary>
+            <fieldset id="more-connectors-fieldset">
+              <legend>More connectors</legend>
+
+              <p class="oj-form-section">Search Console</p>
+              <label>
+                <span>GSC property URL</span>
+                <input type="url" name="gscSiteUrl" placeholder="https://yourpaper.example/">
+              </label>
+              <label>
+                <span>GSC service-account JSON</span>
+                <textarea name="gscServiceAccountJson" rows="3" placeholder="Paste the service-account JSON (or its file path)"></textarea>
+              </label>
+
+              <p class="oj-form-section">Analytics</p>
+              <label>
+                <span>GA4 property ID</span>
+                <input type="text" name="ga4PropertyId" placeholder="123456789">
+              </label>
+              <label>
+                <span>GA4 service-account JSON</span>
+                <textarea name="ga4ServiceAccountJson" rows="3" placeholder="Paste the service-account JSON (or its file path)"></textarea>
+              </label>
+              <label>
+                <span>Chartbeat site domain</span>
+                <input type="text" name="chartbeatSite" placeholder="yourpaper.example">
+              </label>
+              <label>
+                <span>Chartbeat API key</span>
+                <input type="password" name="chartbeatApiKey" placeholder="Chartbeat key">
+              </label>
+              <label>
+                <span>Matomo base URL</span>
+                <input type="url" name="matomoBaseUrl" placeholder="https://matomo.yourpaper.example/">
+              </label>
+              <label>
+                <span>Matomo site ID</span>
+                <input type="text" name="matomoSiteId" placeholder="1">
+              </label>
+              <label>
+                <span>Matomo API token</span>
+                <input type="password" name="matomoApiToken" placeholder="Matomo token">
+              </label>
+              <label>
+                <span>Plausible base URL</span>
+                <input type="url" name="plausibleBaseUrl" placeholder="https://plausible.io">
+              </label>
+              <label>
+                <span>Plausible site ID (domain)</span>
+                <input type="text" name="plausibleSiteId" placeholder="yourpaper.example">
+              </label>
+              <label>
+                <span>Plausible API key</span>
+                <input type="password" name="plausibleApiKey" placeholder="Plausible key">
+              </label>
+              <label>
+                <span>Piano app ID</span>
+                <input type="text" name="pianoAid" placeholder="Piano AID">
+              </label>
+              <label>
+                <span>Piano API key</span>
+                <input type="password" name="pianoApiKey" placeholder="Piano key">
+              </label>
+
+              <p class="oj-form-section">Other SEO</p>
+              <label>
+                <span>NewzDash API key</span>
+                <input type="password" name="newzdashApiKey" placeholder="NewzDash key">
+              </label>
+              <label>
+                <span>SEO Panel base URL</span>
+                <input type="url" name="seopanelBaseUrl" placeholder="https://seopanel.yourpaper.example/">
+              </label>
+              <label>
+                <span>SEO Panel API key</span>
+                <input type="password" name="seopanelApiKey" placeholder="SEO Panel key">
+              </label>
+
+              <p class="oj-form-section">Trends</p>
+              <label>
+                <span>Google Trends geo</span>
+                <input type="text" name="googleTrendsGeo" placeholder="IN" value="IN">
+              </label>
+            </fieldset>
+          </details>
+
           <fieldset id="license-fieldset" hidden>
             <legend>Newsroom licence key</legend>
             <label>

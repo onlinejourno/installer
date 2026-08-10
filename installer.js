@@ -35,6 +35,7 @@ const els = {
   portCheckStatus: document.getElementById("port-check-status"),
   llmFieldset: document.getElementById("llm-fieldset"),
   connectorsFieldset: document.getElementById("connectors-fieldset"),
+  moreConnectorsDetails: document.getElementById("more-connectors-details"),
   btnConfigNext: document.getElementById("btn-config-next"),
   review: document.getElementById("review"),
   btnInstall: document.getElementById("btn-install"),
@@ -165,6 +166,24 @@ function collectConfig() {
     cfg.keywordsEverywhereApiKey = data.get("keywordsEverywhereApiKey")?.trim() || "";
     cfg.dataforseoLogin = data.get("dataforseoLogin")?.trim() || "";
     cfg.dataforseoPassword = data.get("dataforseoPassword")?.trim() || "";
+    cfg.newzdashApiKey = data.get("newzdashApiKey")?.trim() || "";
+    cfg.seopanelBaseUrl = data.get("seopanelBaseUrl")?.trim() || "";
+    cfg.seopanelApiKey = data.get("seopanelApiKey")?.trim() || "";
+    cfg.gscSiteUrl = data.get("gscSiteUrl")?.trim() || "";
+    cfg.gscServiceAccountJson = data.get("gscServiceAccountJson")?.trim() || "";
+    cfg.ga4PropertyId = data.get("ga4PropertyId")?.trim() || "";
+    cfg.ga4ServiceAccountJson = data.get("ga4ServiceAccountJson")?.trim() || "";
+    cfg.chartbeatSite = data.get("chartbeatSite")?.trim() || "";
+    cfg.chartbeatApiKey = data.get("chartbeatApiKey")?.trim() || "";
+    cfg.matomoBaseUrl = data.get("matomoBaseUrl")?.trim() || "";
+    cfg.matomoSiteId = data.get("matomoSiteId")?.trim() || "";
+    cfg.matomoApiToken = data.get("matomoApiToken")?.trim() || "";
+    cfg.plausibleBaseUrl = data.get("plausibleBaseUrl")?.trim() || "";
+    cfg.plausibleSiteId = data.get("plausibleSiteId")?.trim() || "";
+    cfg.plausibleApiKey = data.get("plausibleApiKey")?.trim() || "";
+    cfg.pianoAid = data.get("pianoAid")?.trim() || "";
+    cfg.pianoApiKey = data.get("pianoApiKey")?.trim() || "";
+    cfg.googleTrendsGeo = data.get("googleTrendsGeo")?.trim() || "";
   }
 
   return cfg;
@@ -176,7 +195,23 @@ function renderReview() {
   const licenseLine = p.licence === "Proprietary" && !p.gated
     ? `<dt>Licence key</dt><dd>${c.licenseKey ? "Provided" : "Missing"}</dd>`
     : "";
-  const hasConnectorKey = c.keywordsEverywhereApiKey || c.dataforseoLogin || c.dataforseoPassword;
+  const hasConnectorKey = [
+    c.keywordsEverywhereApiKey,
+    c.dataforseoLogin,
+    c.dataforseoPassword,
+    c.newzdashApiKey,
+    c.seopanelApiKey,
+    c.gscSiteUrl,
+    c.gscServiceAccountJson,
+    c.ga4PropertyId,
+    c.ga4ServiceAccountJson,
+    c.chartbeatApiKey,
+    c.matomoApiToken,
+    c.plausibleApiKey,
+    c.pianoAid,
+    c.pianoApiKey,
+    c.googleTrendsGeo,
+  ].some(Boolean);
   const adminLines = p.needsAdmin
     ? `
       <dt>Newsroom</dt><dd>${escapeHtml(c.outletName)}</dd>
@@ -403,6 +438,10 @@ function configureFormForProduct(product) {
 
   if (els.connectorsFieldset) {
     els.connectorsFieldset.hidden = !needsAdmin;
+  }
+
+  if (els.moreConnectorsDetails) {
+    els.moreConnectorsDetails.hidden = !needsAdmin;
   }
 
   if (els.licenseFieldset) {
