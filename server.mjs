@@ -774,7 +774,7 @@ const server = createServer(async (req, res) => {
     const id = statusMatch[1];
     const job = jobs.get(id);
     if (!job) return sendError(res, 404, "Job not found");
-    send(res, 200, { ok: true, status: job.status, result: job.result });
+    send(res, 200, { ok: true, status: job.status, result: job.result, error: job.error || null });
     return;
   }
 
