@@ -52,6 +52,7 @@
         <div class="oj-actions">
           <button id="btn-check" class="oj-button oj-button--primary">Check system</button>
           <button id="btn-start" class="oj-button oj-button--primary" hidden>Start installation</button>
+          <button id="btn-installed" class="oj-button oj-button--secondary" hidden>View installed</button>
         </div>
       </section>
 
@@ -63,6 +64,17 @@
         <div class="oj-actions">
           <button class="oj-button oj-button--secondary" data-back>Back</button>
           <button id="btn-product-next" class="oj-button oj-button--primary" disabled>Continue</button>
+        </div>
+      </section>
+
+      <!-- Step 2b: Installed products dashboard -->
+      <section id="step-installed" class="oj-step">
+        <h2 class="oj-step__title">Installed products</h2>
+        <p class="oj-step__deck">Products installed in this folder. Uninstalling stops the containers and removes the folder.</p>
+        <div id="installed-list" class="oj-installed-list"></div>
+        <div class="oj-actions">
+          <button class="oj-button oj-button--secondary" data-back>Back</button>
+          <button id="btn-new-install" class="oj-button oj-button--primary">Install another</button>
         </div>
       </section>
 
@@ -270,6 +282,10 @@
       <section id="step-review" class="oj-step">
         <h2 class="oj-step__title">Ready to install</h2>
         <div class="oj-review" id="review"></div>
+        <label class="oj-checkbox">
+          <input type="checkbox" id="open-browser" checked>
+          <span>Open the product in my browser when it is ready</span>
+        </label>
         <div class="oj-actions">
           <button class="oj-button oj-button--secondary" data-back>Back</button>
           <button id="btn-install" class="oj-button oj-button--primary">Install OnlineJourno</button>

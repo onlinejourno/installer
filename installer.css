@@ -463,6 +463,62 @@ code {
   color: var(--oj-fail);
 }
 
+.oj-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--oj-s3);
+  font-family: var(--oj-font-ui);
+  font-size: var(--oj-text-base);
+  margin: var(--oj-s4) 0;
+  cursor: pointer;
+}
+
+.oj-checkbox input {
+  width: auto;
+  margin-top: 0.15rem;
+}
+
+.oj-installed-list {
+  display: grid;
+  gap: var(--oj-s4);
+  margin-bottom: var(--oj-s6);
+}
+
+.oj-installed {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--oj-s4);
+  padding: var(--oj-s4);
+  border: 1px solid var(--oj-rule);
+  border-radius: var(--oj-radius);
+}
+
+.oj-installed__name {
+  font-family: var(--oj-font-display);
+  font-size: var(--oj-text-lg);
+  font-weight: 700;
+  margin: 0;
+}
+
+.oj-installed__meta {
+  font-family: var(--oj-font-ui);
+  font-size: 0.875rem;
+  color: var(--oj-fg-2);
+  margin: var(--oj-s1) 0 0;
+}
+
+.oj-installed__actions {
+  display: flex;
+  gap: var(--oj-s3);
+  flex-shrink: 0;
+}
+
+.oj-installed__empty {
+  color: var(--oj-fg-3);
+  font-family: var(--oj-font-ui);
+}
+
 .oj-details {
   margin-bottom: var(--oj-s6);
   border: 1px solid var(--oj-rule-soft);

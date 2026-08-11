@@ -10,9 +10,10 @@ const state = {
   checks: {},
   config: {},
   jobId: null,
+  installed: [],
 };
 
-const steps = ["welcome", "products", "gated", "config", "review", "progress", "done"];
+const steps = ["welcome", "products", "installed", "gated", "config", "review", "progress", "done"];
 
 const els = {
   wizard: document.getElementById("wizard"),
@@ -20,8 +21,12 @@ const els = {
   prereqHelp: document.getElementById("prereq-help"),
   btnCheck: document.getElementById("btn-check"),
   btnStart: document.getElementById("btn-start"),
+  btnInstalled: document.getElementById("btn-installed"),
   products: document.getElementById("products"),
   btnProductNext: document.getElementById("btn-product-next"),
+  installedList: document.getElementById("installed-list"),
+  btnNewInstall: document.getElementById("btn-new-install"),
+  openBrowserCheckbox: document.getElementById("open-browser"),
   gatedBody: document.getElementById("gated-body"),
   btnRequest: document.getElementById("btn-request"),
   configForm: document.getElementById("config-form"),
@@ -130,6 +135,7 @@ async function runChecks() {
     if (ok) {
       els.btnCheck.hidden = true;
       els.btnStart.hidden = false;
+      if (els.btnInstalled) els.btnInstalled.hidden = false;
     } else {
       els.prereqHelp.hidden = false;
       els.btnCheck.disabled = false;
@@ -185,6 +191,8 @@ function collectConfig() {
     cfg.pianoApiKey = data.get("pianoApiKey")?.trim() || "";
     cfg.googleTrendsGeo = data.get("googleTrendsGeo")?.trim() || "";
   }
+
+  cfg.openBrowser = els.openBrowserCheckbox?.checked ?? true;
 
   return cfg;
 }
@@ -305,13 +313,18 @@ async function startInstall() {
   }
 }
 
-function streamLogs(id) {
+function streamLogs(id, options = {}) {
+  const { onDone } = options;
   const source = new EventSource(`/api/logs/${id}`);
   source.onmessage = (e) => {
     const data = JSON.parse(e.data);
     if (data.done) {
       source.close();
-      showDone(data.status === "done", data.result, data.error);
+      if (onDone) {
+        onDone(data.status === "done", data.result, data.error);
+      } else {
+        showDone(data.status === "done", data.result, data.error);
+      }
       return;
     }
     logLine(data.line);
@@ -320,7 +333,8 @@ function streamLogs(id) {
   source.onerror = () => {
     source.close();
     logLine("Lost connection to installer. Check the server window.", true);
-    showDone(false);
+    if (onDone) onDone(false);
+    else showDone(false);
   };
 }
 
@@ -396,10 +410,93 @@ function escapeHtml(str) {
     .replace(/'/g, "&#039;");
 }
 
+async function loadInstalled() {
+  try {
+    const { installed } = await api("/api/installed");
+    state.installed = installed;
+    renderInstalled();
+  } catch (err) {
+    els.installedList.innerHTML = `<p class="oj-installed__empty">Could not load installed products: ${escapeHtml(err.message)}</p>`;
+  }
+}
+
+function renderInstalled() {
+  const list = state.installed || [];
+  if (list.length === 0) {
+    els.installedList.innerHTML = `<p class="oj-installed__empty">No OnlineJourno products installed in this folder yet.</p>`;
+    return;
+  }
+
+  els.installedList.innerHTML = list
+    .map(
+      (item) => `
+      <div class="oj-installed" data-product="${escapeHtml(item.product)}">
+        <div>
+          <p class="oj-installed__name">${escapeHtml(item.product)}</p>
+          <p class="oj-installed__meta">
+            ${escapeHtml(item.projectRoot)} · port ${escapeHtml(String(item.webPort))} ·
+            ${escapeHtml(new Date(item.installedAt).toLocaleString())}
+          </p>
+        </div>
+        <div class="oj-installed__actions">
+          <a class="oj-button oj-button--primary" href="http://localhost:${escapeHtml(String(item.webPort))}" target="_blank">Open</a>
+          <button class="oj-button oj-button--secondary oj-uninstall" data-product="${escapeHtml(item.product)}">Uninstall</button>
+        </div>
+      </div>
+    `
+    )
+    .join("");
+
+  els.installedList.querySelectorAll(".oj-uninstall").forEach((btn) => {
+    btn.addEventListener("click", () => startUninstall(btn.dataset.product));
+  });
+}
+
+async function startUninstall(productSlug) {
+  if (!confirm(`Uninstall ${productSlug}? This stops its containers and deletes its folder. This cannot be undone.`)) {
+    return;
+  }
+
+  showStep("progress");
+  els.log.innerHTML = "";
+  setProgress(5, "Starting uninstall…");
+
+  try {
+    const { id } = await api("/api/uninstall", {
+      method: "POST",
+      body: JSON.stringify({ product: productSlug }),
+    });
+    state.jobId = id;
+    streamLogs(id, { onDone: (ok) => showUninstallDone(ok) });
+  } catch (err) {
+    setProgress(0, "Failed to start uninstall");
+    logLine(err.message, true);
+    showUninstallDone(false);
+  }
+}
+
+function showUninstallDone(ok) {
+  els.doneTitle.textContent = ok ? "Uninstall complete" : "Uninstall failed";
+  els.doneBody.innerHTML = ok
+    ? `<p>The product has been stopped and its folder removed.</p>`
+    : `<p>Something went wrong. Check the log above.</p>`;
+  els.doneLink.hidden = true;
+  showStep("done");
+  if (ok) loadInstalled();
+}
+
 // Event bindings.
 
 els.btnCheck.addEventListener("click", runChecks);
 els.btnStart.addEventListener("click", () => showStep("products"));
+els.btnInstalled?.addEventListener("click", () => {
+  loadInstalled();
+  showStep("installed");
+});
+els.btnNewInstall?.addEventListener("click", () => {
+  state.selectedProduct = null;
+  showStep("products");
+});
 
 function configureFormForProduct(product) {
   const needsAdmin = !!product.needsAdmin;

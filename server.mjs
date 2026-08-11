@@ -3,7 +3,7 @@
 // Zero runtime dependencies beyond Node 18+.
 
 import { createServer, request as httpRequest } from "node:http";
-import { readFile, stat, access, constants } from "node:fs/promises";
+import { readFile, stat, access, constants, readdir } from "node:fs/promises";
 import { spawn } from "node:child_process";
 import { randomUUID } from "node:crypto";
 import { fileURLToPath } from "node:url";
@@ -284,6 +284,79 @@ function classifyInstallError(err, product) {
     return "The operation timed out. This usually means a slow network or a service that failed to start. Check the log above.";
   }
   return err?.message || "Installation failed. Check the log above for details.";
+}
+
+function openBrowser(url) {
+  const command = process.platform === "win32" ? "start" : process.platform === "darwin" ? "open" : "xdg-open";
+  return new Promise((resolve) => {
+    const child = spawn(command, [url], { shell: true, detached: true, stdio: "ignore" });
+    child.on("error", () => resolve(false));
+    child.on("close", (code) => resolve(code === 0));
+  });
+}
+
+async function listInstalled() {
+  const cwd = process.cwd();
+  const entries = await readdir(cwd, { withFileTypes: true });
+  const manifests = [];
+  for (const entry of entries) {
+    if (!entry.isDirectory()) continue;
+    const manifestPath = join(cwd, entry.name, "onlinejourno-installer-manifest.json");
+    const info = await stat(manifestPath).catch(() => null);
+    if (!info) continue;
+    try {
+      const data = JSON.parse(await readFile(manifestPath, "utf-8"));
+      manifests.push(data);
+    } catch {
+      // ignore malformed manifest
+    }
+  }
+  return manifests.sort((a, b) => new Date(b.installedAt).getTime() - new Date(a.installedAt).getTime());
+}
+
+async function runUninstall(job, manifest) {
+  const log = (line) => {
+    const entry = { time: Date.now(), line };
+    job.logs.push(entry);
+    for (const res of job.listeners) {
+      try {
+        res.write(`data: ${JSON.stringify(entry)}\n\n`);
+      } catch {
+        // Client disconnected.
+      }
+    }
+  };
+
+  try {
+    job.status = "stopping";
+    log(`Stopping ${manifest.product} containers…`);
+    await runCommand("docker", ["compose", "down", "--volumes"], {
+      cwd: manifest.projectRoot,
+      onLine: (line) => log(line.trimEnd()),
+    }).catch((err) => log(`Warning: ${err.message}`));
+
+    job.status = "cleaning";
+    log(`Removing project folder…`);
+    await runCommand("rm", ["-rf", manifest.projectRoot], {
+      onLine: (line) => log(line.trimEnd()),
+    });
+
+    job.status = "done";
+    log("Uninstall complete.");
+  } catch (err) {
+    job.status = "failed";
+    log(`ERROR: ${err.message || String(err)}`);
+  } finally {
+    job.listeners.forEach((res) => {
+      try {
+        res.write(`data: ${JSON.stringify({ time: Date.now(), done: true, status: job.status, result: null })}\n\n`);
+        res.end();
+      } catch {
+        // ignore
+      }
+    });
+    job.listeners = [];
+  }
 }
 
 async function staticFile(pathname) {
@@ -589,6 +662,12 @@ async function runInstall(job, product, inputs) {
       projectRoot,
     };
     log("Installation complete.");
+
+    if (inputs.openBrowser !== false) {
+      log(`Opening ${job.result.url} in your browser…`);
+      const opened = await openBrowser(job.result.url);
+      if (!opened) log("Could not open browser automatically. Use the link above.");
+    }
   } catch (err) {
     job.status = "failed";
     const message = classifyInstallError(err, product);
@@ -732,6 +811,43 @@ const server = createServer(async (req, res) => {
     jobs.set(id, job);
 
     runInstall(job, product, { ...inputs, sessionSecret });
+    send(res, 202, { ok: true, id });
+    return;
+  }
+
+  // API: list installed products.
+  if (pathname === "/api/installed" && req.method === "GET") {
+    const installed = await listInstalled();
+    send(res, 200, { ok: true, installed });
+    return;
+  }
+
+  // API: uninstall a product.
+  if (pathname === "/api/uninstall" && req.method === "POST") {
+    let body = "";
+    for await (const chunk of req) body += chunk;
+    let inputs;
+    try {
+      inputs = JSON.parse(body);
+    } catch {
+      return sendError(res, 400, "Invalid JSON body");
+    }
+
+    const installed = await listInstalled();
+    const manifest = installed.find((m) => m.product === inputs.product);
+    if (!manifest) return sendError(res, 404, "Product not found in this directory");
+
+    const id = randomUUID();
+    const job = {
+      id,
+      status: "queued",
+      logs: [],
+      listeners: [],
+      result: null,
+    };
+    jobs.set(id, job);
+
+    runUninstall(job, manifest);
     send(res, 202, { ok: true, id });
     return;
   }
