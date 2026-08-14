@@ -32,18 +32,17 @@ Newsroom requires a licence key to install. Request one from [onlinejourno.com/c
 | Product | Status | Licence | Live URL | Repo |
 |---|---|---|---|---|
 | OnlineJourno Newsroom | Available | Proprietary | [app.onlinejourno.com](https://app.onlinejourno.com) | private |
+| The Audit | Consulting only | Proprietary | — | private |
 | Daybook | Available | FSL | [daybook.onlinejourno.com](https://daybook.onlinejourno.com) | public |
 | Galley | Available | FSL | [galley.onlinejourno.com](https://galley.onlinejourno.com) | public |
 | Frontmatter | Available | FSL | [frontmatter.onlinejourno.com](https://frontmatter.onlinejourno.com) | public |
-| Loupe | Request access | Proprietary | [loupe.onlinejourno.com](https://loupe.onlinejourno.com) | private |
 | Dispatch | Available | FSL | [dispatch.onlinejourno.com](https://dispatch.onlinejourno.com) | public |
-| RegWatch | Request access | Proprietary | [regwatch.onlinejourno.com](https://regwatch.onlinejourno.com) | private |
-| LawWatch | Request access | Proprietary | [lawwatch.onlinejourno.com](https://lawwatch.onlinejourno.com) | private |
-| PolicyWatch | Request access | Proprietary | [policywatch.onlinejourno.com](https://policywatch.onlinejourno.com) | private |
-| TechWatch | Request access | Proprietary | [techwatch.onlinejourno.com](https://techwatch.onlinejourno.com) | private |
+| Bureau | Available | FSL | [bureau.onlinejourno.com](https://bureau.onlinejourno.com) | public |
+| Watches | Request access | Proprietary | [watches.onlinejourno.com](https://watches.onlinejourno.com) | private |
+| Loupe | Request access | Proprietary | [loupe.onlinejourno.com](https://loupe.onlinejourno.com) | private |
 | Pulse | Request access | Proprietary | [onlinejourno.com/in](https://onlinejourno.com/in) | private |
 | Tare | Available | MIT | [tools.onlinejourno.com/tare](https://tools.onlinejourno.com/tare) | public |
-| Forage | Available | MIT | [tools.onlinejourno.com/crawl-budget-analyser](https://tools.onlinejourno.com/crawl-budget-analyser) | public (in onlinejourno/tools) |
+| Forage | Available | MIT | [tools.onlinejourno.com/forage](https://tools.onlinejourno.com/forage) | public |
 
 **Note:** Daybook, Galley, Frontmatter, Dispatch, Tare and Forage are all installable via the wizard. Each repo's `main` branch now includes a `docker-compose.yml` that honours the `WEB_PORT` environment variable.
 
@@ -81,4 +80,4 @@ Make sure Docker Desktop is running and has enough disk space. The first build d
 
 ## Licence
 
-This installer is part of the OnlineJourno platform and is licensed under the same terms as the flagship product (FSL-1.1, converting to Apache 2.0 after two years).
+The installer is released under the MIT Licence. It downloads and runs OnlineJourno products under their own licences.
