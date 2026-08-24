@@ -1,6 +1,8 @@
 # OnlineJourno Installer
 
-A downloadable, WordPress-style installer for self-hosting OnlineJourno products. No command line required after the first click.
+A downloadable, WordPress-style installer for running OnlineJourno's open-source tools on your own machine. No command line required after the first click.
+
+**Scope:** only the MIT-licensed tools are installable. The rest of the OnlineJourno suite is commercial software, is not source-available, and is not offered for self-hosting — those products are used as hosted services.
 
 ## What it does
 
@@ -27,24 +29,24 @@ A downloadable, WordPress-style installer for self-hosting OnlineJourno products
 
 ## Products
 
-Newsroom requires a licence key to install. Request one from [onlinejourno.com/contact](https://onlinejourno.com/contact/). All other proprietary products are available on request.
+Only Tare is installable today. Every other product in the table below is commercial software with a private repository: the wizard cannot fetch it, and self-hosting is not offered for it. Those products are reached as hosted services at the URLs given, or by arrangement — [onlinejourno.com/contact](https://onlinejourno.com/contact/).
 
 | Product | Status | Licence | Live URL | Repo |
 |---|---|---|---|---|
-| OnlineJourno Newsroom | Available | Proprietary | [app.onlinejourno.com](https://app.onlinejourno.com) | private |
+| OnlineJourno Newsroom | Hosted service | Proprietary | [app.onlinejourno.com](https://app.onlinejourno.com) | private |
 | The Audit | Consulting only | Proprietary | — | private |
-| Daybook | Available | FSL | [daybook.onlinejourno.com](https://daybook.onlinejourno.com) | public |
-| Galley | Available | FSL | [galley.onlinejourno.com](https://galley.onlinejourno.com) | public |
-| Frontmatter | Available | FSL | [frontmatter.onlinejourno.com](https://frontmatter.onlinejourno.com) | public |
-| Dispatch | Available | FSL | [dispatch.onlinejourno.com](https://dispatch.onlinejourno.com) | public |
-| Bureau | Available | FSL | [bureau.onlinejourno.com](https://bureau.onlinejourno.com) | public |
+| Daybook | Hosted service | Proprietary | [daybook.onlinejourno.com](https://daybook.onlinejourno.com) | private |
+| Galley | Hosted service | Proprietary | [galley.onlinejourno.com](https://galley.onlinejourno.com) | private |
+| Frontmatter | Hosted service | Proprietary | [frontmatter.onlinejourno.com](https://frontmatter.onlinejourno.com) | private |
+| Dispatch | Hosted service | Proprietary | [dispatch.onlinejourno.com](https://dispatch.onlinejourno.com) | private |
+| Bureau | Hosted service | Proprietary | [bureau.onlinejourno.com](https://bureau.onlinejourno.com) | private |
 | Watches | Request access | Proprietary | [watches.onlinejourno.com](https://watches.onlinejourno.com) | private |
 | Loupe | Request access | Proprietary | [loupe.onlinejourno.com](https://loupe.onlinejourno.com) | private |
 | Pulse | Request access | Proprietary | [onlinejourno.com/in](https://onlinejourno.com/in) | private |
-| Tare | Available | MIT | [tools.onlinejourno.com/tare](https://tools.onlinejourno.com/tare) | public |
-| Forage | Available | MIT | [tools.onlinejourno.com/forage](https://tools.onlinejourno.com/forage) | public |
+| Tare | Installable | MIT | [tools.onlinejourno.com/tare](https://tools.onlinejourno.com/tare) | public |
+| Forage | Not yet installable | MIT | [tools.onlinejourno.com/forage](https://tools.onlinejourno.com/forage) | public |
 
-**Note:** Daybook, Galley, Frontmatter, Dispatch, Tare and Forage are all installable via the wizard. Each repo's `main` branch now includes a `docker-compose.yml` that honours the `WEB_PORT` environment variable.
+**Note:** Forage is MIT and its repository is public, but the wizard still points at the old private `tools` repository, so it does not install yet. Tare is the only product the wizard can complete today.
 
 ## Where your data lives
 
@@ -57,7 +59,7 @@ Everything stays on your machine:
 
 ## Customising the install
 
-Advanced users can still self-host manually:
+For the MIT tools, you can skip the wizard and run them directly:
 
 ```bash
 cp .env.example .env
@@ -65,7 +67,8 @@ cp .env.example .env
 docker compose up --build
 ```
 
-See `SELF-HOST.md` in the product repository for production settings.
+This applies to Tare and Forage only. The commercial products have no public
+repository and no self-host path.
 
 ## Troubleshooting
 
@@ -80,4 +83,4 @@ Make sure Docker Desktop is running and has enough disk space. The first build d
 
 ## Licence
 
-The installer is released under the MIT Licence. It downloads and runs OnlineJourno products under their own licences.
+The installer is released under the MIT Licence. It downloads and runs OnlineJourno's MIT-licensed tools under their own licences.
